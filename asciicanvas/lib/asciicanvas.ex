@@ -45,6 +45,23 @@ defmodule Asciicanvas do
            outline: outline,
            fill: fill
          }}
+
+      :flood ->
+        [_, _, x, y, "fill", fill] = String.split(input, cleanup_regex, trim: true)
+
+        {:ok,
+         %{
+           type: type,
+           x: String.to_integer(x),
+           y: String.to_integer(y),
+           fill: fill,
+           height: nil,
+           outline: nil,
+           width: nil
+         }}
+
+      _ ->
+        {:error, "Couldn't parse string"}
     end
   end
 end

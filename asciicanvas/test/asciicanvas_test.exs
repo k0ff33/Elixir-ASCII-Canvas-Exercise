@@ -2,6 +2,13 @@ defmodule AsciicanvasTest do
   use ExUnit.Case
   doctest Asciicanvas
 
+  test "parse invalid input" do
+    {:error, _} =
+      Asciicanvas.parse_input(
+        "Circle at [3,2] with radius: 5, outline character: `@`, fill character: `X`"
+      )
+  end
+
   test "parse input with test fixture 1 (1)" do
     {:ok, canvas_options} =
       Asciicanvas.parse_input(
@@ -146,18 +153,21 @@ defmodule AsciicanvasTest do
              }
   end
 
-  # test "parse input with test fixture 3 (4)" do
-  #   assert Asciicanvas.parse_input(
-  #            "Flood fill at `[0, 0]` with fill character `-` (canvas presented in 32x12 size)"
-  #          ) ==
-  #            %{
-  #              fill: "-",
-  #              height: nil,
-  #              outline: nil,
-  #              type: :flood,
-  #              width: nil,
-  #              x: "0",
-  #              y: "0"
-  #            }
-  # end
+  test "parse input with test fixture 3 (4)" do
+    {:ok, canvas_options} =
+      Asciicanvas.parse_input(
+        "Flood fill at `[0, 0]` with fill character `-` (canvas presented in 32x12 size)"
+      )
+
+    assert canvas_options ==
+             %{
+               fill: "-",
+               height: nil,
+               outline: nil,
+               type: :flood,
+               width: nil,
+               x: 0,
+               y: 0
+             }
+  end
 end
