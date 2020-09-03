@@ -9,16 +9,14 @@ defmodule Asciicanvas do
   ## Examples
 
       iex> Asciicanvas.parse_input("Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`")
-      {:ok,
-        %Asciicanvas.Options{
-          fill: "X",
-          height: 3,
-          outline: "@",
-          type: :rectangle,
-          width: 5,
-          x: 3,
-          y: 2
-        }
+      %Asciicanvas.Options{
+        fill: "X",
+        height: 3,
+        outline: "@",
+        type: :rectangle,
+        width: 5,
+        x: 3,
+        y: 2
       }
   """
   def parse_input(input) do
@@ -35,30 +33,25 @@ defmodule Asciicanvas do
         [_, x, y, "width", width, "height", height, "outline", outline, "fill", fill] =
           String.split(input, cleanup_regex, trim: true)
 
-        {:ok,
-         %Asciicanvas.Options{
-           type: type,
-           x: String.to_integer(x),
-           y: String.to_integer(y),
-           width: String.to_integer(width),
-           height: String.to_integer(height),
-           outline: outline,
-           fill: fill
-         }}
+        %Asciicanvas.Options{
+          type: type,
+          x: String.to_integer(x),
+          y: String.to_integer(y),
+          width: String.to_integer(width),
+          height: String.to_integer(height),
+          outline: outline,
+          fill: fill
+        }
 
       :flood ->
         [_, _, x, y, "fill", fill] = String.split(input, cleanup_regex, trim: true)
 
-        {:ok,
-         %Asciicanvas.Options{
-           type: type,
-           x: String.to_integer(x),
-           y: String.to_integer(y),
-           fill: fill
-         }}
-
-      _ ->
-        {:error, "Couldn't parse string"}
+        %Asciicanvas.Options{
+          type: type,
+          x: String.to_integer(x),
+          y: String.to_integer(y),
+          fill: fill
+        }
     end
   end
 end
