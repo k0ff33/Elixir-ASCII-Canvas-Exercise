@@ -6,6 +6,23 @@ defmodule Asciicanvas do
   def draw(input) do
     input
     |> parse_input
+    |> create_empty_canvas
+  end
+
+  def create_empty_canvas(
+        %Asciicanvas.Options{type: :rectangle, x: x, y: y, width: width, height: height} = options
+      ) do
+    columns = x + width
+    rows = y + height
+
+    canvas =
+      0..(rows + 1)
+      |> Enum.map(fn x ->
+        {x, 0..columns |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
+      end)
+      |> Enum.into(%{})
+
+    {canvas, options}
   end
 
   @doc """
