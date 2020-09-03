@@ -3,6 +3,11 @@ defmodule Asciicanvas do
   Documentation for Asciicanvas.
   """
 
+  def draw(input) do
+    input
+    |> parse_input
+  end
+
   @doc """
   Parse ASCII canvas command into machine-readable format
 
