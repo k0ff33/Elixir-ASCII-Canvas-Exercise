@@ -16,7 +16,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "X",
                height: 3,
                outline: "@",
@@ -34,7 +34,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "O",
                height: 6,
                outline: "X",
@@ -52,7 +52,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: ".",
                height: 6,
                outline: "none",
@@ -70,7 +70,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "none",
                height: 4,
                outline: "O",
@@ -88,7 +88,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "X",
                height: 3,
                outline: "X",
@@ -106,7 +106,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: ".",
                height: 6,
                outline: "none",
@@ -124,7 +124,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "none",
                height: 4,
                outline: "O",
@@ -142,7 +142,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "X",
                height: 3,
                outline: "X",
@@ -160,7 +160,7 @@ defmodule AsciicanvasTest do
       )
 
     assert canvas_options ==
-             %{
+             %Asciicanvas.Options{
                fill: "-",
                height: nil,
                outline: nil,

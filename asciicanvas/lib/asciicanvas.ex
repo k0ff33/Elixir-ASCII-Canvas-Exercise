@@ -10,7 +10,7 @@ defmodule Asciicanvas do
 
       iex> Asciicanvas.parse_input("Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`")
       {:ok,
-        %{
+        %Asciicanvas.Options{
           fill: "X",
           height: 3,
           outline: "@",
@@ -36,7 +36,7 @@ defmodule Asciicanvas do
           String.split(input, cleanup_regex, trim: true)
 
         {:ok,
-         %{
+         %Asciicanvas.Options{
            type: type,
            x: String.to_integer(x),
            y: String.to_integer(y),
@@ -50,14 +50,11 @@ defmodule Asciicanvas do
         [_, _, x, y, "fill", fill] = String.split(input, cleanup_regex, trim: true)
 
         {:ok,
-         %{
+         %Asciicanvas.Options{
            type: type,
            x: String.to_integer(x),
            y: String.to_integer(y),
-           fill: fill,
-           height: nil,
-           outline: nil,
-           width: nil
+           fill: fill
          }}
 
       _ ->
