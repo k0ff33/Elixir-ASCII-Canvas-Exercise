@@ -7,6 +7,41 @@ defmodule Asciicanvas do
     input
     |> parse_input
     |> create_empty_canvas
+    |> draw_rectangle
+  end
+
+  def draw_rectangle(
+        {grid,
+         %Asciicanvas.Options{
+           x: x,
+           y: y,
+           width: width,
+           height: height,
+           outline: outline,
+           fill: fill
+         }}
+      ) do
+    outer_char = if outline !== "none", do: outline, else: fill
+
+    grid =
+      x..(x + width - 1)
+      |> Enum.reduce(grid, fn column, map ->
+        y..(y + height - 1)
+        |> Enum.reduce(map, fn row, map ->
+          put_in(map[row][column], outer_char)
+        end)
+      end)
+
+    result =
+      grid
+      |> Enum.map(fn {_, x} ->
+        x
+        |> Enum.map(fn {_, y} -> y end)
+        |> Enum.join()
+      end)
+      |> Enum.join("\n")
+
+    IO.puts(result)
   end
 
   def create_empty_canvas(
