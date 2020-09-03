@@ -9,39 +9,42 @@ defmodule Asciicanvas do
   ## Examples
 
       iex> Asciicanvas.parse_input("Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`")
-      %{
-        fill: "X",
-        height: "3",
-        outline: "@",
-        type: :rectangle,
-        width: "5",
-        x: "3",
-        y: "2"
+      {:ok,
+        %{
+          fill: "X",
+          height: 3,
+          outline: "@",
+          type: :rectangle,
+          width: 5,
+          x: 3,
+          y: 2
+        }
       }
   """
   def parse_input(input) do
     type =
-      Regex.run(~r/^\w+/, input)
+      Regex.run(~r/\w+/, input)
       |> hd
       |> String.downcase()
       |> String.to_atom()
 
-    [x, y] =
-      String.replace(input, ~r{(.+\[|\].+| )}, "")
-      |> String.split(",")
+    cleanup_regex = ~r/( |`|,|\[|\]|:|character|at|with|\(.+\))/
 
-    extract_property = fn input, property ->
-      clean_regex = ~r/(`| |:|character)/
+    case type do
+      :rectangle ->
+        [_, x, y, "width", width, "height", height, "outline", outline, "fill", fill] =
+          String.split(input, cleanup_regex, trim: true)
 
-      String.replace(input, clean_regex, "")
-      |> String.replace(~r/(.+#{property}|,.+)/, "")
+        {:ok,
+         %{
+           type: type,
+           x: String.to_integer(x),
+           y: String.to_integer(y),
+           width: String.to_integer(width),
+           height: String.to_integer(height),
+           outline: outline,
+           fill: fill
+         }}
     end
-
-    width = extract_property.(input, "width")
-    height = extract_property.(input, "height")
-    outline = extract_property.(input, "outline")
-    fill = extract_property.(input, "fill")
-
-    %{type: type, x: x, y: y, width: width, height: height, outline: outline, fill: fill}
   end
 end
