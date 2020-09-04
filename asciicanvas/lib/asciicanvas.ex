@@ -39,14 +39,21 @@ defmodule Asciicanvas do
          }}
       ) do
     outer_char = if outline !== "none", do: outline, else: fill
+    inner_char = if fill !== "none", do: fill, else: " "
 
-    grid =
-      x..(x + width - 1)
-      |> Enum.reduce(grid, fn column, map ->
-        y..(y + height - 1)
-        |> Enum.reduce(map, fn row, map ->
-          put_in(map[row][column], outer_char)
-        end)
+    is_edge? = fn
+      column, row when row >= x and (column == y or column == y + height) -> true
+      column, row when column >= y and (row == x or row === x + width) -> true
+      _column, _row -> false
+    end
+
+    x..(x + width)
+    |> Enum.reduce(grid, fn row, map ->
+      y..(y + height)
+      |> Enum.reduce(map, fn column, map ->
+        char = if is_edge?.(column, row), do: outer_char, else: inner_char
+
+        put_in(map[column][row], char)
       end)
     end)
   end
