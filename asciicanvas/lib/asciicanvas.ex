@@ -83,12 +83,13 @@ defmodule Asciicanvas do
       |> String.downcase()
       |> String.to_atom()
 
-    cleanup_regex = ~r/( |`|,|\[|\]|:|character|at|with|\(.+\))/
+    ascii_regex = ~r/\b\d+\b|\b\w\b|`[[:print:]]`|none/u
 
     case type do
       :rectangle ->
-        [_, x, y, "width", width, "height", height, "outline", outline, "fill", fill] =
-          String.split(input, cleanup_regex, trim: true)
+        [x, y, width, height, outline, fill] =
+          Regex.scan(ascii_regex, input)
+          |> Enum.map(fn [str] -> String.replace(str, "`", "") end)
 
         %Asciicanvas.Options{
           type: type,
@@ -101,7 +102,9 @@ defmodule Asciicanvas do
         }
 
       :flood ->
-        [_, _, x, y, "fill", fill] = String.split(input, cleanup_regex, trim: true)
+        [x, y, fill] =
+          Regex.scan(ascii_regex, input)
+          |> Enum.map(fn [str] -> String.replace(str, "`", "") end)
 
         %Asciicanvas.Options{
           type: type,
