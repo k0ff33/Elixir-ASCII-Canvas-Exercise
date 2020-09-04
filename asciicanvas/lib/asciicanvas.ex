@@ -8,6 +8,22 @@ defmodule Asciicanvas do
     |> parse_input
     |> create_empty_canvas
     |> draw_rectangle
+    |> print
+  end
+
+  def print(grid) do
+    result =
+      grid
+      |> Enum.map(fn {_, x} ->
+        x
+        |> Enum.map(fn {_, y} -> y end)
+        |> Enum.join()
+      end)
+      |> Enum.join("\n")
+
+    IO.puts(result)
+
+    grid
   end
 
   @spec draw_rectangle({any, Asciicanvas.Options.t()}) :: any
@@ -32,17 +48,7 @@ defmodule Asciicanvas do
           put_in(map[row][column], outer_char)
         end)
       end)
-
-    result =
-      grid
-      |> Enum.map(fn {_, x} ->
-        x
-        |> Enum.map(fn {_, y} -> y end)
-        |> Enum.join()
-      end)
-      |> Enum.join("\n")
-
-    IO.puts(result)
+    end)
   end
 
   @spec create_empty_canvas(Asciicanvas.Options.t()) :: {map, Asciicanvas.Options.t()}
