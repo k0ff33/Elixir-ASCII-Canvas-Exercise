@@ -10,6 +10,7 @@ defmodule Asciicanvas do
     |> draw_rectangle
   end
 
+  @spec draw_rectangle({any, Asciicanvas.Options.t()}) :: any
   def draw_rectangle(
         {grid,
          %Asciicanvas.Options{
@@ -44,6 +45,7 @@ defmodule Asciicanvas do
     IO.puts(result)
   end
 
+  @spec create_empty_canvas(Asciicanvas.Options.t()) :: {map, Asciicanvas.Options.t()}
   def create_empty_canvas(
         %Asciicanvas.Options{type: :rectangle, x: x, y: y, width: width, height: height} = options
       ) do
@@ -60,6 +62,7 @@ defmodule Asciicanvas do
     {canvas, options}
   end
 
+  @spec parse_input(binary) :: Asciicanvas.Options.t()
   @doc """
   Parse ASCII canvas command into machine-readable format
 
