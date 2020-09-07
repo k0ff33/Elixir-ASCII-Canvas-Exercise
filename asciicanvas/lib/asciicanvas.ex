@@ -3,11 +3,38 @@ defmodule Asciicanvas do
   Documentation for Asciicanvas.
   """
 
-  def draw(input) do
-    input
-    |> parse_input
-    |> create_empty_canvas
-    |> draw_rectangle
+  @doc """
+  Draw ASCII image based on passed commands
+
+  ## Examples
+
+    iex> Asciicanvas.draw([ "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`", "Rectangle at [10, 3] with width: 14, height: 6, outline character: `X`, fill character: `O`" ])
+    "
+
+   @@@@@@
+   @XXXX@ XXXXXXXXXXXXXXX
+   @XXXX@ XOOOOOOOOOOOOOX
+   @@@@@@ XOOOOOOOOOOOOOX
+          XOOOOOOOOOOOOOX
+          XOOOOOOOOOOOOOX
+          XOOOOOOOOOOOOOX
+          XXXXXXXXXXXXXXX
+                         "
+  """
+  def draw(commands) do
+    parsed_cmds = Enum.map(commands, fn input -> parse_input(input) end)
+
+    width =
+      Enum.map(parsed_cmds, fn %Asciicanvas.Options{x: x, width: width} -> x + width end)
+      |> Enum.max()
+
+    height =
+      Enum.map(parsed_cmds, fn %Asciicanvas.Options{y: y, height: height} -> y + height end)
+      |> Enum.max()
+
+    Enum.reduce(parsed_cmds, create_empty_canvas(width, height), fn cmd, canvas ->
+      draw_rectangle({canvas, cmd})
+    end)
     |> print
   end
 
@@ -22,8 +49,7 @@ defmodule Asciicanvas do
       |> Enum.join("\n")
 
     IO.puts(result)
-
-    grid
+    result
   end
 
   @spec draw_rectangle({any, Asciicanvas.Options.t()}) :: any
@@ -58,21 +84,12 @@ defmodule Asciicanvas do
     end)
   end
 
-  @spec create_empty_canvas(Asciicanvas.Options.t()) :: {map, Asciicanvas.Options.t()}
-  def create_empty_canvas(
-        %Asciicanvas.Options{type: :rectangle, x: x, y: y, width: width, height: height} = options
-      ) do
-    columns = x + width
-    rows = y + height
-
-    canvas =
-      0..(rows + 1)
-      |> Enum.map(fn x ->
-        {x, 0..columns |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
-      end)
-      |> Enum.into(%{})
-
-    {canvas, options}
+  def create_empty_canvas(columns, rows) do
+    0..(rows + 1)
+    |> Enum.map(fn x ->
+      {x, 0..columns |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
+    end)
+    |> Enum.into(%{})
   end
 
   @spec parse_input(binary) :: Asciicanvas.Options.t()
