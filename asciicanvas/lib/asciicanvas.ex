@@ -67,15 +67,18 @@ defmodule Asciicanvas do
     outer_char = if outline !== "none", do: outline, else: fill
     inner_char = if fill !== "none", do: fill, else: " "
 
+    shape_width = x + width - 1
+    shape_height = y + height - 1
+
     is_edge? = fn
-      column, row when row >= x and (column == y or column == y + height) -> true
-      column, row when column >= y and (row == x or row === x + width) -> true
+      column, row when row >= x and (column == y or column == shape_height) -> true
+      column, row when column >= y and (row == x or row === shape_width) -> true
       _column, _row -> false
     end
 
-    x..(x + width)
+    x..shape_width
     |> Enum.reduce(grid, fn row, map ->
-      y..(y + height)
+      y..shape_height
       |> Enum.reduce(map, fn column, map ->
         char = if is_edge?.(column, row), do: outer_char, else: inner_char
 
@@ -85,9 +88,9 @@ defmodule Asciicanvas do
   end
 
   def create_empty_canvas(columns, rows) do
-    0..(rows + 1)
+    0..(rows - 1)
     |> Enum.map(fn x ->
-      {x, 0..columns |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
+      {x, 0..(columns - 1) |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
     end)
     |> Enum.into(%{})
   end
