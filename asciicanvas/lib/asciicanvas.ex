@@ -8,18 +8,8 @@ defmodule Asciicanvas do
 
   ## Examples
 
-    iex> Asciicanvas.draw([ "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`", "Rectangle at [10, 3] with width: 14, height: 6, outline character: `X`, fill character: `O`" ])
-    "
+      Asciicanvas.draw([ "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`", "Rectangle at [10, 3] with width: 14, height: 6, outline character: `X`, fill character: `O`" ])
 
-   @@@@@@
-   @XXXX@ XXXXXXXXXXXXXXX
-   @XXXX@ XOOOOOOOOOOOOOX
-   @@@@@@ XOOOOOOOOOOOOOX
-          XOOOOOOOOOOOOOX
-          XOOOOOOOOOOOOOX
-          XOOOOOOOOOOOOOX
-          XXXXXXXXXXXXXXX
-                         "
   """
   def draw(commands) do
     parsed_cmds = Enum.map(commands, fn input -> parse_input(input) end)
@@ -33,29 +23,28 @@ defmodule Asciicanvas do
       |> Enum.max()
 
     Enum.reduce(parsed_cmds, create_empty_canvas(width, height), fn cmd, canvas ->
-      draw_rectangle({canvas, cmd})
+      draw_shape({canvas, cmd})
     end)
     |> print
   end
 
   def print(grid) do
     result =
-      grid
-      |> Enum.map(fn {_, x} ->
+      Enum.map_join(grid, "\n", fn {_, x} ->
         x
-        |> Enum.map(fn {_, y} -> y end)
-        |> Enum.join()
+        |> Enum.map_join(fn {_, y} -> y end)
       end)
-      |> Enum.join("\n")
 
     IO.puts(result)
+
     result
   end
 
-  @spec draw_rectangle({any, Asciicanvas.Options.t()}) :: any
-  def draw_rectangle(
+  @spec draw_shape({any, Asciicanvas.Options.t()}) :: any
+  def draw_shape(
         {grid,
          %Asciicanvas.Options{
+           type: :rectangle,
            x: x,
            y: y,
            width: width,
