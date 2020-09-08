@@ -15,15 +15,25 @@ defmodule Asciicanvas do
     parsed_cmds = Enum.map(commands, fn input -> parse_input(input) end)
 
     width =
-      Enum.map(parsed_cmds, fn %Asciicanvas.Options{x: x, width: width} -> x + width end)
+      Enum.map(parsed_cmds, fn %Asciicanvas.Options{type: type, x: x, width: width} ->
+        case type do
+          :rectangle -> x + width
+          :flood -> x
+        end
+      end)
       |> Enum.max()
 
     height =
-      Enum.map(parsed_cmds, fn %Asciicanvas.Options{y: y, height: height} -> y + height end)
+      Enum.map(parsed_cmds, fn %Asciicanvas.Options{type: type, y: y, height: height} ->
+        case type do
+          :rectangle -> y + height
+          :flood -> y
+        end
+      end)
       |> Enum.max()
 
     Enum.reduce(parsed_cmds, create_empty_canvas(width, height), fn cmd, canvas ->
-      draw_shape({canvas, cmd})
+      draw_shape(canvas, cmd)
     end)
     |> print
   end
@@ -40,18 +50,34 @@ defmodule Asciicanvas do
     result
   end
 
-  @spec draw_shape({any, Asciicanvas.Options.t()}) :: any
   def draw_shape(
-        {grid,
-         %Asciicanvas.Options{
-           type: :rectangle,
-           x: x,
-           y: y,
-           width: width,
-           height: height,
-           outline: outline,
-           fill: fill
-         }}
+        grid,
+        %Asciicanvas.Options{type: :flood, x: column, y: row, fill: fill} = options
+      ) do
+    case grid[column][row] do
+      " " ->
+        put_in(grid[column][row], fill)
+        |> draw_shape(%Asciicanvas.Options{options | y: row + 1})
+        |> draw_shape(%Asciicanvas.Options{options | y: row - 1})
+        |> draw_shape(%Asciicanvas.Options{options | x: column + 1})
+        |> draw_shape(%Asciicanvas.Options{options | x: column - 1})
+
+      _ ->
+        grid
+    end
+  end
+
+  def draw_shape(
+        grid,
+        %Asciicanvas.Options{
+          type: :rectangle,
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          outline: outline,
+          fill: fill
+        }
       ) do
     outer_char = if outline !== "none", do: outline, else: fill
     inner_char = if fill !== "none", do: fill, else: " "
