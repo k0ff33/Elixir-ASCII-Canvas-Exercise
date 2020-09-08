@@ -76,6 +76,10 @@ defmodule Asciicanvas do
            fill: fill
          }
        ) do
+    if(outline == "none" && fill == "none") do
+      raise ArgumentError, message: "either fill or outline should always be present"
+    end
+
     outer_char = if outline !== "none", do: outline, else: fill
     inner_char = if fill !== "none", do: fill, else: " "
 

@@ -2,6 +2,7 @@ defmodule AsciicanvasTest do
   use ExUnit.Case
   doctest Asciicanvas
 
+  # input parsing
   test "parse invalid input" do
     assert_raise CaseClauseError, fn ->
       Asciicanvas.parse_input(
@@ -170,6 +171,24 @@ defmodule AsciicanvasTest do
                x: 0,
                y: 0
              }
+  end
+
+  # drawing ASCII canvas
+  test "invalid input" do
+    assert_raise MatchError, fn ->
+      Asciicanvas.draw([
+        "Rectangle at `[3,2]",
+        "Rectangle at [10, 3] with width: 14"
+      ])
+    end
+  end
+
+  test "drawing rectangle without outline or fill" do
+    assert_raise ArgumentError, fn ->
+      Asciicanvas.draw([
+        "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `none`, fill character: `none`"
+      ])
+    end
   end
 
   test "drawing test fixture 1" do
