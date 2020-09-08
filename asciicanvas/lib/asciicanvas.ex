@@ -4,12 +4,26 @@ defmodule Asciicanvas do
   """
 
   @doc """
-  Draw ASCII image based on passed commands
+  Draw ASCII image based on passed commands.
+
+  Supported commansd include:
+  - A rectangle parameterised with…
+    - Coordinates for the **upper-left corner**.
+    - **width** and **height**.
+    - an optional **fill** character.
+    - an optional **outline** character.
+    - One of either **fill** or **outline** should always be present.
+    - e.g.: "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`"
+
+  - A flood fill operation, parameterised with…
+    - the **start coordinates** from where to begin the flood fill.
+    - a **fill** character.
+    - e.g.: Flood fill at `[0, 0]` with fill character `-`
 
   ## Examples
 
-      Asciicanvas.draw([ "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`", "Rectangle at [10, 3] with width: 14, height: 6, outline character: `X`, fill character: `O`" ])
-
+    Asciicanvas.draw([ "Rectangle at `[3,2]` with width: `5`, height: `3`, outline character: `@`, fill character: `X`", "Rectangle at [10, 3] with width: 14, height: 6, outline character: `X`, fill character: `O`" ])
+    "                        \n                        \n   @@@@@                \n   @XXX@  XXXXXXXXXXXXXX\n   @@@@@  XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XXXXXXXXXXXXXX"
   """
   def draw(commands) do
     parsed_cmds = Enum.map(commands, fn input -> parse_input(input) end)
@@ -21,22 +35,21 @@ defmodule Asciicanvas do
     |> print
   end
 
-  def print(grid) do
-    result =
-      Enum.map_join(grid, "\n", fn {_, x} ->
+  defp print(grid) do
+    Enum.map_join(grid, "\n", fn
+      {_, x} ->
         x
-        |> Enum.map_join(fn {_, y} -> y end)
-      end)
-
-    IO.puts(result)
-
-    result
+        |> Enum.map_join(fn
+          {_, y} -> y
+        end)
+    end)
   end
 
-  def draw_shape(
-        grid,
-        %Asciicanvas.Options{type: :flood, x: column, y: row, fill: fill} = options
-      ) do
+  # flood fill
+  defp draw_shape(
+         grid,
+         %Asciicanvas.Options{type: :flood, x: column, y: row, fill: fill} = options
+       ) do
     case grid[column][row] do
       " " ->
         put_in(grid[column][row], fill)
@@ -50,18 +63,19 @@ defmodule Asciicanvas do
     end
   end
 
-  def draw_shape(
-        grid,
-        %Asciicanvas.Options{
-          type: :rectangle,
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          outline: outline,
-          fill: fill
-        }
-      ) do
+  # rectangle
+  defp draw_shape(
+         grid,
+         %Asciicanvas.Options{
+           type: :rectangle,
+           x: x,
+           y: y,
+           width: width,
+           height: height,
+           outline: outline,
+           fill: fill
+         }
+       ) do
     outer_char = if outline !== "none", do: outline, else: fill
     inner_char = if fill !== "none", do: fill, else: " "
 
@@ -85,7 +99,7 @@ defmodule Asciicanvas do
     end)
   end
 
-  def create_empty_canvas(columns, rows) do
+  defp create_empty_canvas(columns, rows) do
     0..(rows - 1)
     |> Enum.map(fn x ->
       {x, 0..(columns - 1) |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
@@ -93,7 +107,7 @@ defmodule Asciicanvas do
     |> Enum.into(%{})
   end
 
-  def calculate_canvas_dimensions(parsed_cmds) do
+  defp calculate_canvas_dimensions(parsed_cmds) do
     Enum.reduce(parsed_cmds, %{width: 0, height: 0}, fn
       %Asciicanvas.Options{type: :rectangle, x: x, y: y, width: width, height: height},
       dimensions ->
@@ -113,7 +127,7 @@ defmodule Asciicanvas do
 
   @spec parse_input(binary) :: Asciicanvas.Options.t()
   @doc """
-  Parse ASCII canvas command into machine-readable format
+  Parse ASCII canvas command into machine-readable format (Asciicanvas.Options struct)
 
   ## Examples
 
