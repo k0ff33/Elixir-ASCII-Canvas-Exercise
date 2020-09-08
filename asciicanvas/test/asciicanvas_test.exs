@@ -191,6 +191,16 @@ defmodule AsciicanvasTest do
     end
   end
 
+  test "drawing single rectangle" do
+    shape =
+      Asciicanvas.draw([
+        "Rectangle at `[3,8]` with width: `14`, height: `6`, outline character: `~`, fill character: `none`"
+      ])
+
+    assert shape ==
+             "                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n   ~~~~~~~~~~~~~~\n   ~            ~\n   ~            ~\n   ~            ~\n   ~            ~\n   ~~~~~~~~~~~~~~"
+  end
+
   test "drawing test fixture 1" do
     shape =
       Asciicanvas.draw([
@@ -225,5 +235,18 @@ defmodule AsciicanvasTest do
 
     assert shape ==
              "--------------.......\n--------------.......\n--------------.......\nOOOOOOOO------.......\nO      O------.......\nO    XXXXX----.......\nOOOOOXXXXX-----------\n     XXXXX-----------"
+  end
+
+  test "drawing inverted test fixture 3" do
+    shape =
+      Asciicanvas.draw([
+        "Flood fill at `[0, 0]` with fill character `-` (canvas presented in 32x12 size)",
+        "Rectangle at `[5, 5]` with width `5`, height `3`, outline character: `X`, fill: `X`",
+        "Rectangle at `[0, 3]` with width `8`, height `4`, outline character: `O`, fill: `none`",
+        "Rectangle at `[14, 0]` with width `7`, height `6`, outline character: none, fill: `.`"
+      ])
+
+    assert shape ==
+             "--------------.......\n--------------.......\n--------------.......\nOOOOOOOO------.......\nO      O------.......\nO      OXX----.......\nOOOOOOOOXX-----------\n-----XXXXX-----------"
   end
 end

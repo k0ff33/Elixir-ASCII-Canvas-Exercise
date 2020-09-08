@@ -104,9 +104,9 @@ defmodule Asciicanvas do
   end
 
   defp create_empty_canvas(columns, rows) do
-    0..(rows - 1)
+    0..abs(rows - 1)
     |> Enum.map(fn x ->
-      {x, 0..(columns - 1) |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
+      {x, 0..abs(columns - 1) |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
     end)
     |> Enum.into(%{})
   end
