@@ -14,27 +14,10 @@ defmodule Asciicanvas do
   def draw(commands) do
     parsed_cmds = Enum.map(commands, fn input -> parse_input(input) end)
 
-    width =
-      Enum.map(parsed_cmds, fn %Asciicanvas.Options{type: type, x: x, width: width} ->
-        case type do
-          :rectangle -> x + width
-          :flood -> x
-        end
-      end)
-      |> Enum.max()
+    %{:width => width, :height => height} = calculate_canvas_dimensions(parsed_cmds)
+    empty_canvas = create_empty_canvas(width, height)
 
-    height =
-      Enum.map(parsed_cmds, fn %Asciicanvas.Options{type: type, y: y, height: height} ->
-        case type do
-          :rectangle -> y + height
-          :flood -> y
-        end
-      end)
-      |> Enum.max()
-
-    Enum.reduce(parsed_cmds, create_empty_canvas(width, height), fn cmd, canvas ->
-      draw_shape(canvas, cmd)
-    end)
+    Enum.reduce(parsed_cmds, empty_canvas, fn cmd, canvas -> draw_shape(canvas, cmd) end)
     |> print
   end
 
@@ -108,6 +91,24 @@ defmodule Asciicanvas do
       {x, 0..(columns - 1) |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
     end)
     |> Enum.into(%{})
+  end
+
+  def calculate_canvas_dimensions(parsed_cmds) do
+    Enum.reduce(parsed_cmds, %{width: 0, height: 0}, fn
+      %Asciicanvas.Options{type: :rectangle, x: x, y: y, width: width, height: height},
+      dimensions ->
+        dimensions
+        |> put_in([:width], max(dimensions[:width], x + width))
+        |> put_in([:height], max(dimensions[:height], y + height))
+
+      %Asciicanvas.Options{type: :flood, x: x, y: y}, dimensions ->
+        dimensions
+        |> put_in([:width], max(dimensions[:width], x))
+        |> put_in([:height], max(dimensions[:height], y))
+
+      _, dimensions ->
+        dimensions
+    end)
   end
 
   @spec parse_input(binary) :: Asciicanvas.Options.t()
