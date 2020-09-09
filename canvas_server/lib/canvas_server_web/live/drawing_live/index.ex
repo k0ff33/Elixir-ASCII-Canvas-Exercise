@@ -15,12 +15,6 @@ defmodule CanvasServerWeb.DrawingLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Drawing")
-    |> assign(:drawing, Art.get_drawing!(id))
-  end
-
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Drawing")
@@ -31,14 +25,6 @@ defmodule CanvasServerWeb.DrawingLive.Index do
     socket
     |> assign(:page_title, "Listing Drawings")
     |> assign(:drawing, nil)
-  end
-
-  @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    drawing = Art.get_drawing!(id)
-    {:ok, _} = Art.delete_drawing(drawing)
-
-    {:noreply, assign(socket, :drawings, list_drawings())}
   end
 
   @impl true

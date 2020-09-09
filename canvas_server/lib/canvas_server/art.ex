@@ -58,40 +58,6 @@ defmodule CanvasServer.Art do
   end
 
   @doc """
-  Updates a drawing.
-
-  ## Examples
-
-      iex> update_drawing(drawing, %{field: new_value})
-      {:ok, %Drawing{}}
-
-      iex> update_drawing(drawing, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_drawing(%Drawing{} = drawing, attrs) do
-    drawing
-    |> Drawing.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a drawing.
-
-  ## Examples
-
-      iex> delete_drawing(drawing)
-      {:ok, %Drawing{}}
-
-      iex> delete_drawing(drawing)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_drawing(%Drawing{} = drawing) do
-    Repo.delete(drawing)
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking drawing changes.
 
   ## Examples

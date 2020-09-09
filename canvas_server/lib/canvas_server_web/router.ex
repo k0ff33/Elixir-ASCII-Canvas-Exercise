@@ -21,10 +21,8 @@ defmodule CanvasServerWeb.Router do
 
     live "/drawings", DrawingLive.Index, :index
     live "/drawings/new", DrawingLive.Index, :new
-    live "/drawings/:id/edit", DrawingLive.Index, :edit
 
     live "/drawings/:id", DrawingLive.Show, :show
-    live "/drawings/:id/show/edit", DrawingLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

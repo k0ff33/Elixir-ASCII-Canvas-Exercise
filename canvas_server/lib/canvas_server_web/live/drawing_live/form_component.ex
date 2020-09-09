@@ -27,19 +27,6 @@ defmodule CanvasServerWeb.DrawingLive.FormComponent do
     save_drawing(socket, socket.assigns.action, drawing_params)
   end
 
-  defp save_drawing(socket, :edit, drawing_params) do
-    case Art.update_drawing(socket.assigns.drawing, drawing_params) do
-      {:ok, _drawing} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Drawing updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
-  end
-
   defp save_drawing(socket, :new, drawing_params) do
     case Art.create_drawing(drawing_params) do
       {:ok, _drawing} ->
