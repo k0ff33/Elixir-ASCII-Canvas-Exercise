@@ -53,6 +53,7 @@ defmodule CanvasServer.Ascii do
     %Drawing{}
     |> Drawing.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:drawing_created)
   end
 
   @doc """
@@ -100,5 +101,16 @@ defmodule CanvasServer.Ascii do
   """
   def change_drawing(%Drawing{} = drawing, attrs \\ %{}) do
     Drawing.changeset(drawing, attrs)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(CanvasServer.PubSub, "drawings")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, drawing}, event) do
+    Phoenix.PubSub.broadcast(CanvasServer.PubSub, "drawings", {event, drawing})
+    {:ok, drawing}
   end
 end

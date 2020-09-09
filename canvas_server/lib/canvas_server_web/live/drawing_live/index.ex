@@ -6,6 +6,7 @@ defmodule CanvasServerWeb.DrawingLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Ascii.subscribe()
     {:ok, assign(socket, :drawings, list_drawings())}
   end
 
@@ -38,6 +39,11 @@ defmodule CanvasServerWeb.DrawingLive.Index do
     {:ok, _} = Ascii.delete_drawing(drawing)
 
     {:noreply, assign(socket, :drawings, list_drawings())}
+  end
+
+  @impl true
+  def handle_info({:drawing_created, drawing}, socket) do
+    {:noreply, update(socket, :drawings, fn drawings -> [drawing | drawings] end)}
   end
 
   defp list_drawings do
