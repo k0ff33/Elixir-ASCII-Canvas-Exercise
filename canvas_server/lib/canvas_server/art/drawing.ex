@@ -1,4 +1,4 @@
-defmodule CanvasServer.Ascii.Drawing do
+defmodule CanvasServer.Art.Drawing do
   use Ecto.Schema
   import Ecto.Changeset
 

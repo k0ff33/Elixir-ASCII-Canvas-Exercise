@@ -3,14 +3,14 @@ defmodule CanvasServerWeb.DrawingLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias CanvasServer.Ascii
+  alias CanvasServer.Art
 
   @create_attrs %{drawing: "some drawing"}
   @update_attrs %{drawing: "some updated drawing"}
   @invalid_attrs %{drawing: nil}
 
   defp fixture(:drawing) do
-    {:ok, drawing} = Ascii.create_drawing(@create_attrs)
+    {:ok, drawing} = Art.create_drawing(@create_attrs)
     drawing
   end
 

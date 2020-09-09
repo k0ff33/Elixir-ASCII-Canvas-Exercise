@@ -1,11 +1,11 @@
 defmodule CanvasServerWeb.DrawingLive.FormComponent do
   use CanvasServerWeb, :live_component
 
-  alias CanvasServer.Ascii
+  alias CanvasServer.Art
 
   @impl true
   def update(%{drawing: drawing} = assigns, socket) do
-    changeset = Ascii.change_drawing(drawing)
+    changeset = Art.change_drawing(drawing)
 
     {:ok,
      socket
@@ -17,7 +17,7 @@ defmodule CanvasServerWeb.DrawingLive.FormComponent do
   def handle_event("validate", %{"drawing" => drawing_params}, socket) do
     changeset =
       socket.assigns.drawing
-      |> Ascii.change_drawing(drawing_params)
+      |> Art.change_drawing(drawing_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
@@ -28,7 +28,7 @@ defmodule CanvasServerWeb.DrawingLive.FormComponent do
   end
 
   defp save_drawing(socket, :edit, drawing_params) do
-    case Ascii.update_drawing(socket.assigns.drawing, drawing_params) do
+    case Art.update_drawing(socket.assigns.drawing, drawing_params) do
       {:ok, _drawing} ->
         {:noreply,
          socket
@@ -41,7 +41,7 @@ defmodule CanvasServerWeb.DrawingLive.FormComponent do
   end
 
   defp save_drawing(socket, :new, drawing_params) do
-    case Ascii.create_drawing(drawing_params) do
+    case Art.create_drawing(drawing_params) do
       {:ok, _drawing} ->
         {:noreply,
          socket

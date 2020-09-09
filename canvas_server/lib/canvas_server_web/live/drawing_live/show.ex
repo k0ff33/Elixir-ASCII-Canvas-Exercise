@@ -1,7 +1,7 @@
 defmodule CanvasServerWeb.DrawingLive.Show do
   use CanvasServerWeb, :live_view
 
-  alias CanvasServer.Ascii
+  alias CanvasServer.Art
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,7 +13,7 @@ defmodule CanvasServerWeb.DrawingLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:drawing, Ascii.get_drawing!(id))}
+     |> assign(:drawing, Art.get_drawing!(id))}
   end
 
   defp page_title(:show), do: "Show Drawing"

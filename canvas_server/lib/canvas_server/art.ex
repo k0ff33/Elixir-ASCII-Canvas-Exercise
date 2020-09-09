@@ -1,12 +1,12 @@
-defmodule CanvasServer.Ascii do
+defmodule CanvasServer.Art do
   @moduledoc """
-  The Ascii context.
+  The Art context.
   """
 
   import Ecto.Query, warn: false
   alias CanvasServer.Repo
 
-  alias CanvasServer.Ascii.Drawing
+  alias CanvasServer.Art.Drawing
 
   @doc """
   Returns the list of drawings.

@@ -1,12 +1,12 @@
 defmodule CanvasServerWeb.DrawingLive.Index do
   use CanvasServerWeb, :live_view
 
-  alias CanvasServer.Ascii
-  alias CanvasServer.Ascii.Drawing
+  alias CanvasServer.Art
+  alias CanvasServer.Art.Drawing
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Ascii.subscribe()
+    if connected?(socket), do: Art.subscribe()
     {:ok, assign(socket, :drawings, list_drawings())}
   end
 
@@ -18,7 +18,7 @@ defmodule CanvasServerWeb.DrawingLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Drawing")
-    |> assign(:drawing, Ascii.get_drawing!(id))
+    |> assign(:drawing, Art.get_drawing!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -35,8 +35,8 @@ defmodule CanvasServerWeb.DrawingLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    drawing = Ascii.get_drawing!(id)
-    {:ok, _} = Ascii.delete_drawing(drawing)
+    drawing = Art.get_drawing!(id)
+    {:ok, _} = Art.delete_drawing(drawing)
 
     {:noreply, assign(socket, :drawings, list_drawings())}
   end
@@ -47,6 +47,6 @@ defmodule CanvasServerWeb.DrawingLive.Index do
   end
 
   defp list_drawings do
-    Ascii.list_drawings()
+    Art.list_drawings()
   end
 end
