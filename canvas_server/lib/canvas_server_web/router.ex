@@ -17,7 +17,7 @@ defmodule CanvasServerWeb.Router do
   scope "/", CanvasServerWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    live "/", DrawingLive.Index, :index
 
     live "/drawings", DrawingLive.Index, :index
     live "/drawings/new", DrawingLive.Index, :new
