@@ -1,4 +1,4 @@
-<h1>Listing Drawings</h1>
+<h2>Latest drawings</h2>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, CanvasServerWeb.DrawingLive.FormComponent,
@@ -9,27 +9,14 @@
     return_to: Routes.drawing_index_path(@socket, :index) %>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Drawing</th>
+<div class="drawings">
+  <%= for {drawing, no} <- Enum.with_index(@drawings) do %>
+    <div id="drawing-<%= drawing.id %>">
+      <a href="/drawings/<%= drawing.id %>">Drawing #<%= no + 1 %></a>
+      <pre><%= drawing.drawing %></pre>
+    </div>
+  <% end %>
+</div>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="drawings">
-    <%= for drawing <- @drawings do %>
-      <tr id="drawing-<%= drawing.id %>">
-        <td><%= drawing.drawing %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.drawing_show_path(@socket, :show, drawing) %></span>
-          <span><%= live_patch "Edit", to: Routes.drawing_index_path(@socket, :edit, drawing) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: drawing.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 <span><%= live_patch "New Drawing", to: Routes.drawing_index_path(@socket, :new) %></span>

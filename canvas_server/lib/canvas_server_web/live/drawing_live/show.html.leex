@@ -1,22 +1,4 @@
-<h1>Show Drawing</h1>
-
-<%= if @live_action in [:edit] do %>
-  <%= live_modal @socket, CanvasServerWeb.DrawingLive.FormComponent,
-    id: @drawing.id,
-    title: @page_title,
-    action: @live_action,
-    drawing: @drawing,
-    return_to: Routes.drawing_show_path(@socket, :show, @drawing) %>
-<% end %>
-
-<ul>
-
-  <li>
-    <strong>Drawing:</strong>
-    <%= @drawing.drawing %>
-  </li>
-
-</ul>
-
-<span><%= live_patch "Edit", to: Routes.drawing_show_path(@socket, :edit, @drawing), class: "button" %></span>
-<span><%= live_redirect "Back", to: Routes.drawing_index_path(@socket, :index) %></span>
+<div>
+  <h3>Drawing: <%= @drawing.id %></h3>
+  <pre><%= @drawing.drawing %></pre>
+</div>
