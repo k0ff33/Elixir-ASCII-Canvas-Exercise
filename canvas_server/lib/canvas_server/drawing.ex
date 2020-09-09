@@ -4,7 +4,7 @@ defmodule CanvasServer.Drawing do
 
   schema "drawings" do
     field :drawing, :string
-    field :uid, Ecto.UUID, autogenerate: true
+    field :uuid, Ecto.UUID, autogenerate: true
 
     timestamps()
   end
@@ -12,7 +12,7 @@ defmodule CanvasServer.Drawing do
   @doc false
   def changeset(drawing, attrs) do
     drawing
-    |> cast(attrs, [:uid, :drawing])
-    |> validate_required([:uid, :drawing])
+    |> cast(attrs, [:uuid, :drawing])
+    |> validate_required([:uuid, :drawing])
   end
 end
