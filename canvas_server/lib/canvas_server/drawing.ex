@@ -4,7 +4,7 @@ defmodule CanvasServer.Drawing do
 
   schema "drawings" do
     field :drawing, :string
-    field :uid, Ecto.UUID
+    field :uid, Ecto.UUID, autogenerate: true
 
     timestamps()
   end
