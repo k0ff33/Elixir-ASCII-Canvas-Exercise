@@ -20,7 +20,6 @@ defmodule CanvasServerWeb.Router do
     live "/", DrawingLive.Index, :index
 
     live "/drawings", DrawingLive.Index, :index
-    live "/drawings/new", DrawingLive.Index, :new
 
     live "/drawings/:id", DrawingLive.Show, :show
   end

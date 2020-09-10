@@ -56,19 +56,6 @@ defmodule CanvasServer.Art do
     |> broadcast(:drawing_created)
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking drawing changes.
-
-  ## Examples
-
-      iex> change_drawing(drawing)
-      %Ecto.Changeset{data: %Drawing{}}
-
-  """
-  def change_drawing(%Drawing{} = drawing, attrs \\ %{}) do
-    Drawing.changeset(drawing, attrs)
-  end
-
   def subscribe do
     Phoenix.PubSub.subscribe(CanvasServer.PubSub, "drawings")
   end

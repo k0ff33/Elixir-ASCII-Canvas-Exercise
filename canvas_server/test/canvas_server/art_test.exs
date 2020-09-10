@@ -37,28 +37,5 @@ defmodule CanvasServer.AsciiTest do
     test "create_drawing/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Art.create_drawing(@invalid_attrs)
     end
-
-    test "update_drawing/2 with valid data updates the drawing" do
-      drawing = drawing_fixture()
-      assert {:ok, %Drawing{} = drawing} = Art.update_drawing(drawing, @update_attrs)
-      assert drawing.drawing == "some updated drawing"
-    end
-
-    test "update_drawing/2 with invalid data returns error changeset" do
-      drawing = drawing_fixture()
-      assert {:error, %Ecto.Changeset{}} = Art.update_drawing(drawing, @invalid_attrs)
-      assert drawing == Art.get_drawing!(drawing.id)
-    end
-
-    test "delete_drawing/1 deletes the drawing" do
-      drawing = drawing_fixture()
-      assert {:ok, %Drawing{}} = Art.delete_drawing(drawing)
-      assert_raise Ecto.NoResultsError, fn -> Art.get_drawing!(drawing.id) end
-    end
-
-    test "change_drawing/1 returns a drawing changeset" do
-      drawing = drawing_fixture()
-      assert %Ecto.Changeset{} = Art.change_drawing(drawing)
-    end
   end
 end

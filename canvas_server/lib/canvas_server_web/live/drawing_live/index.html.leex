@@ -1,14 +1,5 @@
 <h2>Latest drawings</h2>
 
-<%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, CanvasServerWeb.DrawingLive.FormComponent,
-    id: @drawing.id || :new,
-    title: @page_title,
-    action: @live_action,
-    drawing: @drawing,
-    return_to: Routes.drawing_index_path(@socket, :index) %>
-<% end %>
-
 <div class="drawings">
   <%= for {drawing, no} <- Enum.with_index(@drawings) do %>
     <div id="drawing-<%= drawing.id %>">
@@ -17,6 +8,3 @@
     </div>
   <% end %>
 </div>
-
-
-<span><%= live_patch "New Drawing", to: Routes.drawing_index_path(@socket, :new) %></span>
