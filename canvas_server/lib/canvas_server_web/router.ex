@@ -26,9 +26,11 @@ defmodule CanvasServerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", CanvasServerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", CanvasServerWeb do
+    pipe_through :api
+
+    resources "/drawings", Api.DrawingController, only: [:show, :create, :index]
+  end
 
   # Enables LiveDashboard only for development
   #
