@@ -5,7 +5,7 @@ config :canvas_server, CanvasServer.Repo,
   username: "postgres",
   password: "postgres",
   database: "canvas_server_dev",
-  hostname: "localhost",
+  hostname: System.get_env("DB_HOST", "localhost"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
