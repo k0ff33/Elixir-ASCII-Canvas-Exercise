@@ -13,15 +13,18 @@ defmodule CanvasServerWeb.Api.DrawingController do
     json(conn, drawing)
   end
 
-  def create(conn, %{"operations" => operations}) do
-    case Art.create_drawing(%{:drawing_operations => operations}) do
-      {:ok, _drawing} ->
-        json(conn, %{message: "Drawing created successfully"})
+  def create(conn, %{"operations" => drawing_operations}) do
+    case Asciicanvas.draw(drawing_operations) do
+      {:ok, image} ->
+        case Art.create_drawing(%{:drawing => image}) do
+          {:ok, _drawing} ->
+            json(conn, %{message: "Drawing created successfully"})
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: changeset})
+          {:error, %Ecto.Changeset{} = changeset} ->
+            conn
+            |> put_status(:bad_request)
+            |> json(%{error: changeset})
+        end
 
       {:error, message} ->
         conn
