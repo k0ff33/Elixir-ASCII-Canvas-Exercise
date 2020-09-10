@@ -37,11 +37,10 @@ defmodule Asciicanvas do
 
   defp print(grid) do
     Enum.map_join(grid, "\n", fn
-      {_, x} ->
-        x
-        |> Enum.map_join(fn
-          {_, y} -> y
-        end)
+      {_, column} ->
+        column
+        |> Enum.map_join(fn {_, row} -> row end)
+        |> String.trim_trailing()
     end)
   end
 

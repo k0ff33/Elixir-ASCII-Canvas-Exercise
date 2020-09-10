@@ -18,7 +18,7 @@ defmodule CanvasServer.Art do
 
   """
   def list_drawings do
-    Repo.all(Drawing)
+    Drawing |> order_by(desc: :inserted_at) |> Repo.all()
   end
 
   @doc """
