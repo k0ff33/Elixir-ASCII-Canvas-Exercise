@@ -153,13 +153,13 @@ defmodule Asciicanvas do
       |> String.downcase()
       |> String.to_atom()
 
-    ascii_regex = ~r/\b\d+\b|\b\w\b|`[[:print:]]`|none/u
+    # Handle all different drawing operations provided in the description
+    # - with values between separators like []; wrapped in apostrophes `` or not; and "none" as a full word
+    ascii_regex = ~r/\b\d+\b|\b\w\b|(?<=`).(?=`)|(?<=: ).(?=,)|(?<=: ).(?=$)|none/u
 
     case type do
       :rectangle ->
-        [x, y, width, height, outline, fill] =
-          Regex.scan(ascii_regex, input)
-          |> Enum.map(fn [str] -> String.replace(str, "`", "") end)
+        [x, y, width, height, outline, fill] = Regex.scan(ascii_regex, input) |> List.flatten()
 
         %Asciicanvas.Options{
           type: type,
@@ -172,9 +172,7 @@ defmodule Asciicanvas do
         }
 
       :flood ->
-        [x, y, fill] =
-          Regex.scan(ascii_regex, input)
-          |> Enum.map(fn [str] -> String.replace(str, "`", "") end)
+        [x, y, fill] = Regex.scan(ascii_regex, input) |> List.flatten()
 
         %Asciicanvas.Options{
           type: type,
