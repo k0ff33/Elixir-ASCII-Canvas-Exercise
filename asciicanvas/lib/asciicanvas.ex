@@ -26,13 +26,13 @@ defmodule Asciicanvas do
     "                        \n                        \n   @@@@@                \n   @XXX@  XXXXXXXXXXXXXX\n   @@@@@  XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XXXXXXXXXXXXXX"
   """
   def draw(commands) do
-    parsed_cmds = Enum.map(commands, fn input -> parse_input(input) end)
+    parsed_commands = Enum.map(commands, fn command -> parse_input(command) end)
 
-    %{:width => width, :height => height} = calculate_canvas_dimensions(parsed_cmds)
-    empty_canvas = create_empty_canvas(width, height)
-
-    Enum.reduce(parsed_cmds, empty_canvas, fn cmd, canvas -> draw_shape(canvas, cmd) end)
-    |> print
+    parsed_commands
+    |> calculate_canvas_dimensions()
+    |> create_empty_canvas()
+    |> draw_image(parsed_commands)
+    |> print()
   end
 
   defp print(grid) do
@@ -102,7 +102,11 @@ defmodule Asciicanvas do
     end)
   end
 
-  defp create_empty_canvas(columns, rows) do
+  defp draw_image(grid, parsed_commands) do
+    Enum.reduce(parsed_commands, grid, fn cmd, canvas -> draw_shape(canvas, cmd) end)
+  end
+
+  defp create_empty_canvas({columns, rows}) do
     0..abs(rows - 1)
     |> Enum.map(fn x ->
       {x, 0..abs(columns - 1) |> Enum.map(fn y -> {y, " "} end) |> Enum.into(%{})}
@@ -111,17 +115,17 @@ defmodule Asciicanvas do
   end
 
   defp calculate_canvas_dimensions(parsed_cmds) do
-    Enum.reduce(parsed_cmds, %{width: 0, height: 0}, fn
+    Enum.reduce(parsed_cmds, {0, 0}, fn
       %Asciicanvas.Options{type: :rectangle, x: x, y: y, width: width, height: height},
       dimensions ->
-        dimensions
-        |> put_in([:width], max(dimensions[:width], x + width))
-        |> put_in([:height], max(dimensions[:height], y + height))
+        max_width = max(elem(dimensions, 0), x + width)
+        max_height = max(elem(dimensions, 1), y + height)
+        {max_width, max_height}
 
       %Asciicanvas.Options{type: :flood, x: x, y: y}, dimensions ->
-        dimensions
-        |> put_in([:width], max(dimensions[:width], x))
-        |> put_in([:height], max(dimensions[:height], y))
+        max_width = max(elem(dimensions, 0), x)
+        max_height = max(elem(dimensions, 1), y)
+        {max_width, max_height}
 
       _, dimensions ->
         dimensions
