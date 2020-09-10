@@ -10,7 +10,7 @@ defmodule CanvasServerWeb.Api.DrawingController do
 
   def show(conn, %{"id" => id}) do
     drawing = Art.get_drawing!(id)
-    json(conn, drawing)
+    json(conn, %{data: drawing})
   end
 
   def create(conn, %{"operations" => drawing_operations}) do
