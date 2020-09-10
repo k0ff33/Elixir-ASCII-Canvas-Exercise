@@ -5,9 +5,10 @@ defmodule CanvasServerWeb.DrawingLiveTest do
 
   alias CanvasServer.Art
 
-  @create_attrs %{drawing: "some drawing"}
-  @update_attrs %{drawing: "some updated drawing"}
-  @invalid_attrs %{drawing: nil}
+  @create_attrs %{
+    drawing:
+      "\n\n   @@@@@\n   @XXX@  XXXXXXXXXXXXXX\n   @@@@@  XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XXXXXXXXXXXXXX"
+  }
 
   defp fixture(:drawing) do
     {:ok, drawing} = Art.create_drawing(@create_attrs)
@@ -36,7 +37,7 @@ defmodule CanvasServerWeb.DrawingLiveTest do
     test "displays drawing", %{conn: conn, drawing: drawing} do
       {:ok, _show_live, html} = live(conn, Routes.drawing_show_path(conn, :show, drawing))
 
-      assert html =~ "Show Drawing"
+      assert html =~ "Drawing"
       assert html =~ drawing.drawing
     end
   end

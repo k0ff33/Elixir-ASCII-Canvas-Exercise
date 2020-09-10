@@ -6,8 +6,10 @@ defmodule CanvasServer.AsciiTest do
   describe "drawings" do
     alias CanvasServer.Art.Drawing
 
-    @valid_attrs %{drawing: "some drawing"}
-    @update_attrs %{drawing: "some updated drawing"}
+    @valid_attrs %{
+      drawing:
+        "\n\n   @@@@@\n   @XXX@  XXXXXXXXXXXXXX\n   @@@@@  XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XXXXXXXXXXXXXX"
+    }
     @invalid_attrs %{drawing: nil}
 
     def drawing_fixture(attrs \\ %{}) do
@@ -31,7 +33,9 @@ defmodule CanvasServer.AsciiTest do
 
     test "create_drawing/1 with valid data creates a drawing" do
       assert {:ok, %Drawing{} = drawing} = Art.create_drawing(@valid_attrs)
-      assert drawing.drawing == "some drawing"
+
+      assert drawing.drawing ==
+               "\n\n   @@@@@\n   @XXX@  XXXXXXXXXXXXXX\n   @@@@@  XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XXXXXXXXXXXXXX"
     end
 
     test "create_drawing/1 with invalid data returns error changeset" do
