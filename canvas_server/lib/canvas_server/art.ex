@@ -49,11 +49,16 @@ defmodule CanvasServer.Art do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_drawing(%{:drawing => drawing_operations}) do
-    Asciicanvas.draw(drawing_operations)
-    |> (fn image -> %Drawing{:drawing => image} end).()
-    |> Repo.insert()
-    |> broadcast(:drawing_created)
+  def create_drawing(%{:drawing_operations => drawing_operations}) do
+    case Asciicanvas.draw(drawing_operations) do
+      {:ok, image} ->
+        %Drawing{:drawing => image}
+        |> Repo.insert()
+        |> broadcast(:drawing_created)
+
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
   def subscribe do

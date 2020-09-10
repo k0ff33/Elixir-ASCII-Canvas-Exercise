@@ -26,22 +26,32 @@ defmodule Asciicanvas do
     "                        \n                        \n   @@@@@                \n   @XXX@  XXXXXXXXXXXXXX\n   @@@@@  XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XOOOOOOOOOOOOX\n          XXXXXXXXXXXXXX"
   """
   def draw(commands) do
-    parsed_commands = Enum.map(commands, fn command -> parse_input(command) end)
+    try do
+      parsed_commands = Enum.map(commands, fn command -> parse_input(command) end)
 
-    parsed_commands
-    |> calculate_canvas_dimensions()
-    |> create_empty_canvas()
-    |> draw_image(parsed_commands)
-    |> print()
+      parsed_commands
+      |> calculate_canvas_dimensions()
+      |> create_empty_canvas()
+      |> draw_image(parsed_commands)
+      |> print()
+    rescue
+      ArgumentError -> {:error, "unsupported draw operation"}
+      MatchError -> {:error, "too many arguments provided"}
+    catch
+      e -> {:error, "unkown error #{e}"}
+    end
   end
 
   defp print(grid) do
-    Enum.map_join(grid, "\n", fn
-      {_, column} ->
-        column
-        |> Enum.map_join(fn {_, row} -> row end)
-        |> String.trim_trailing()
-    end)
+    image =
+      Enum.map_join(grid, "\n", fn
+        {_, column} ->
+          column
+          |> Enum.map_join(fn {_, row} -> row end)
+          |> String.trim_trailing()
+      end)
+
+    {:ok, image}
   end
 
   # flood fill
@@ -185,7 +195,7 @@ defmodule Asciicanvas do
         }
 
       _ ->
-        raise(ArgumentError, message: "unsupported draw operation")
+        raise(ArgumentError)
     end
   end
 end
