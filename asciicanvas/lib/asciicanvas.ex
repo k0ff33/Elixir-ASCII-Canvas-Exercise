@@ -179,6 +179,9 @@ defmodule Asciicanvas do
           y: String.to_integer(y),
           fill: fill
         }
+
+      _ ->
+        raise(ArgumentError, message: "unsupported draw operation")
     end
   end
 end
