@@ -1,9 +1,9 @@
 <h2>Latest drawings</h2>
 
 <div class="drawings">
-  <%= for {drawing, no} <- Enum.with_index(@drawings) do %>
+  <%= for drawing <- @drawings do %>
     <div id="drawing-<%= drawing.id %>">
-      <a href="/drawings/<%= drawing.id %>">Drawing #<%= no + 1 %></a>
+      <a href="/drawings/<%= drawing.id %>"><%= drawing.id %></a>
       <pre><%= drawing.drawing %></pre>
     </div>
   <% end %>
