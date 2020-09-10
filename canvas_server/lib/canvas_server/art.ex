@@ -49,9 +49,8 @@ defmodule CanvasServer.Art do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_drawing(%{"drawing" => drawing}) do
-    String.split(drawing, "\n", trim: true)
-    |> Asciicanvas.draw()
+  def create_drawing(%{:drawing => drawing_operations}) do
+    Asciicanvas.draw(drawing_operations)
     |> (fn image -> %Drawing{:drawing => image} end).()
     |> Repo.insert()
     |> broadcast(:drawing_created)

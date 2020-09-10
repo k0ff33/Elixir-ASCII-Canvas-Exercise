@@ -27,8 +27,10 @@ defmodule CanvasServerWeb.DrawingLive.FormComponent do
     save_drawing(socket, socket.assigns.action, drawing_params)
   end
 
-  defp save_drawing(socket, :new, drawing_params) do
-    case Art.create_drawing(drawing_params) do
+  defp save_drawing(socket, :new, %{"drawing" => drawing_params}) do
+    operations = String.split(drawing_params, "\n", trim: true)
+
+    case Art.create_drawing(%{:drawing => operations}) do
       {:ok, _drawing} ->
         {:noreply,
          socket
