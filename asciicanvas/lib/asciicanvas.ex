@@ -35,8 +35,8 @@ defmodule Asciicanvas do
       |> draw_image(parsed_commands)
       |> print()
     rescue
-      ArgumentError -> {:error, "unsupported draw operation"}
-      MatchError -> {:error, "too many arguments provided"}
+      e in ArgumentError -> {:error, e.message}
+      MatchError -> {:error, "too many or not enought arguments provided"}
     catch
       e -> {:error, "unkown error #{e}"}
     end
@@ -85,7 +85,7 @@ defmodule Asciicanvas do
            fill: fill
          }
        ) do
-    if(outline == "none" && fill == "none") do
+    if outline == "none" && fill == "none" do
       raise ArgumentError, message: "either fill or outline should always be present"
     end
 
@@ -195,7 +195,7 @@ defmodule Asciicanvas do
         }
 
       _ ->
-        raise(ArgumentError)
+        raise(ArgumentError, message: "unsupported draw operation")
     end
   end
 end
