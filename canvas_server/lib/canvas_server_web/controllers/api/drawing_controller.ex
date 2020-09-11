@@ -17,8 +17,8 @@ defmodule CanvasServerWeb.Api.DrawingController do
     case Asciicanvas.draw(drawing_operations) do
       {:ok, image} ->
         case Art.create_drawing(%{:drawing => image}) do
-          {:ok, _drawing} ->
-            json(conn, %{message: "Drawing created successfully"})
+          {:ok, drawing} ->
+            json(conn, %{message: "Drawing created successfully", data: drawing})
 
           {:error, %Ecto.Changeset{} = changeset} ->
             conn
