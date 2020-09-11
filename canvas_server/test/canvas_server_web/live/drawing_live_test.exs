@@ -51,13 +51,11 @@ defmodule CanvasServerWeb.DrawingLiveTest do
   describe "Create" do
     test "new drawings are automatically displayed", %{conn: conn} do
       conn = post(conn, Routes.drawing_path(conn, :create), @post_operations)
+      {:ok, index_live, _html} = live(conn, Routes.drawing_index_path(conn, :index))
 
-      assert %{"message" => message} = json_response(conn, 200)
+      assert %{"message" => message, "data" => drawing} = json_response(conn, 200)
       assert message == "Drawing created successfully"
-
-      {:ok, _index_live, html} = live(conn, Routes.drawing_index_path(conn, :index))
-
-      assert html =~ @create_attrs[:drawing]
+      assert has_element?(index_live, "#drawing-#{drawing["id"]}")
     end
   end
 end
