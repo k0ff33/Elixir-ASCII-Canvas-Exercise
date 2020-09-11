@@ -45,3 +45,9 @@ $ curl -X POST \
 ```
 
 Supported draw commands are documented in `task.md` file.
+
+## Testing
+
+Use `mix test` inside `asciicanvas` or `canvas_server` directories to run unit and integration tests.
+
+Tests will be automatically executed if you used docker-compose for starting up the service.
