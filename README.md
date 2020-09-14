@@ -50,6 +50,6 @@ Supported draw commands are documented in `task.md` file.
 
 ## Testing
 
-Use `mix test` inside `asciicanvas` or `canvas_server` directories to run unit and integration tests.
+Navigate to `asciicanvas` or `canvas_server` directories and use `mix test` to run unit and integration tests.
 
-Tests will be automatically executed if you used docker-compose for starting up the service.
+If setup with Docker was used, first open the container shell with `docker-compose run web sh`, navigate to the specific folder and use `mix test`. Note that tests are automatically executed on every startup with `docker-compose`.
