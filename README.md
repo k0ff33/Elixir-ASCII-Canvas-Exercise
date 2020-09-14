@@ -11,7 +11,9 @@ It is divided into two parts:
 
 ### With docker (recommended)
 
-Simply use `docker-compose up` in the root directory and wait until you see a successful message: `[info] Access CanvasServerWeb.Endpoint at http://localhost:4000`.
+- Make `run.sh` executable with `chmod +x run.sh`
+- Spin up the service with PostgreSQL database with `docker-compose up`.
+- wait until you see a successful message: `[info] Access CanvasServerWeb.Endpoint at http://localhost:4000`.
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
