@@ -42,7 +42,7 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 # POST /api/drawings { operations: string[] }
 $ curl -X POST \
    -H "Content-Type: application/json"  \
-   -d '{ "operations": [ "Rectangle at [3,2] with width: 5, height: 3, outline character: `@`, fill character: `X`" ] }' \
+   -d '{ "operations": [ "Rectangle at [3,2] with width: 5, height: 3, outline character: `@`, fill character: `X`", "Flood fill at `[0, 0]` with fill character `-` (canvas presented in 32x12 size)", "- Rectangle at `[5, 5]` with width `5`, height `3`, outline character: `#`, fill: `none`" ] }' \
    http://localhost:4000/api/drawings
 ```
 
