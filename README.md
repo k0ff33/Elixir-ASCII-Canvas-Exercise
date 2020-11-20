@@ -1,6 +1,6 @@
 # ASCII Canvas Exercise
 
-This project aims to solve the exercise of creating a client-server system that represents ASCII art drawing canvas (documented in [task.md](./task.md). It is written in Elixir, uses Phoenix on the backend and PostgreSQL database.
+This project aims to solve the exercise of creating a client-server system that represents ASCII art drawing canvas (documented in [task.md](./task.md)). It is written in Elixir, uses Phoenix on the backend and PostgreSQL database.
 
 It is divided into two parts:
 
